@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TokenGS: Decoupling 3D Gaussian Prediction</title>
+    
+    <style>
+        /* General Dark Theme */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f0f0f;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #333;
+        }
+        .navbar .brand {
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .navbar .brand img { width: 40px; } /* Placeholder for NVIDIA logo */
+        .navbar .links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+        }
+        .navbar .links a:hover { color: #fff; }
+
+        /* Hero Section (Title, Authors, Buttons) */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px 20px;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            margin: 0 0 20px 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.2;
+        }
+        .text-green { color: #76b900; } /* NVIDIA Green */
+        
+        .authors {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        .affiliations {
+            color: #76b900;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .notes {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        .venue {
+            font-size: 1.5rem;
+            color: #76b900;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .button-group a {
+            background-color: #76b900;
+            color: #000;
+            text-decoration: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+        }
+        .button-group a:hover { background-color: #8cde00; }
+
+        /* Content Sections (Abstract & Viewer) */
+        .section {
+            max-width: 900px;
+            margin: 0 auto 50px auto;
+            padding: 0 20px;
+        }
+        .section h2 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        .abstract-text {
+            font-size: 1.1rem;
+            color: #ddd;
+            text-align: justify;
+        }
+
+        /* 3D Viewer Container */
+        #viewer-container {
+            width: 100%;
+            height: 60vh;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        #controls-info {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            pointer-events: none;
+            border: 1px solid #444;
+        }
+        #controls-info h3 { margin: 0 0 10px 0; font-size: 1rem; color: #76b900; }
+        
+        .placeholder-image {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+    </style>
+
+    <!-- Import Maps to load Three.js and the Splat library via CDN -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
+            "@mkkellogg/gaussian-splats-3d": "https://unpkg.com/@mkkellogg/gaussian-splats-3d/build/gaussian-splats-3d.module.js"
+        }
+    }
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="brand">
+            Spatial Intelligence Lab
+        </div>
+        <div class="links">
+            <a href="#gallery">Gallery</a>
+            <a href="#abstract">Abstract</a>
+            <a href="#method">Method</a>
+            <a href="#citation">Citation</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1><span class="text-green">TokenGS:</span><br>Decoupling 3D Gaussian Prediction from Pixels with Learnable Tokens</h1>
+        
+        <div class="authors">
+            <span>Jiawei Ren*</span>
+            <span>Michal Tyszkiewicz*</span>
+            <span>Jiahui Huang†</span>
+            <span>Zan Gojcic†</span>
+        </div>
+        
+        <div class="affiliations">NVIDIA</div>
+        <div class="notes">* Equal Contribution &nbsp;&nbsp; † Equal Advising</div>
+        
+        <div class="venue">CVPR 2026 (Highlight)</div>
+
+        <div class="button-group">
+            <a href="#">📄 Paper</a>
+            <a href="https://github.com/HaseebUlHassan437/tokengs-demo" target="_blank">💻 Code</a>
+            <a href="#demo">🎮 Demo</a>
+            <a href="#">🤗 HuggingFace</a>
+            <a href="#citation">📌 Citation</a>
+        </div>
+    </div>
+
+    <!-- Abstract Section -->
+    <div id="abstract" class="section">
+        <h2>Abstract</h2>
+        <p class="abstract-text">
+            In this work, we revisit several key design choices of modern Transformer-based approaches for feed-forward 3D Gaussian Splatting (3DGS) prediction. We argue that the common practice of regressing Gaussian means as depths along camera rays is suboptimal, and instead propose to directly regress 3D mean coordinates using only a self-supervised rendering loss. This formulation allows us to move from the standard encoder-only design to an encoder-decoder architecture with learnable Gaussian tokens.
+        </p>
+        <!-- Placeholder Image -->
+        <img src="https://images.unsplash.com/photo-1616161560417-66d4aba5ce44?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Architecture Diagram Placeholder" class="placeholder-image">
+    </div>
+
+    <!-- Interactive 3D Demo Section -->
+    <div id="demo" class="section">
+        <h2>Interactive Viewer</h2>
+        <p style="text-align: center; color: #aaa;">Explore the reconstructed 3D Gaussians in real-time.</p>
+        
+        <div id="viewer-container">
+            <div id="controls-info">
+                <h3>🎥 Camera Controls</h3>
+                • Left Click + Drag: Orbit / Rotate<br>
+                • Right Click + Drag: Pan<br>
+                • Scroll: Zoom In/Out<br>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D Viewer Script -->
+    <script type="module">
+        import * as THREE from 'three';
+        import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
+
+        // Initialize the Viewer
+        const viewer = new GaussianSplats3D.Viewer({
+            cameraUp: [0, -1, -0.6], 
+            initialCameraPosition: [-1, -4, 6],
+            initialCameraLookAt: [0, 4, 0],
+            rootElement: document.getElementById('viewer-container'),
+            useBuiltInControls: true, 
+        });
+
+        // Load a publicly available demo splat (Bonsai tree)
+        const splatURL = 'https://huggingface.co/datasets/mkkellogg/gaussian-splats-3d/resolve/main/bonsai.ksplat';
+
+        viewer.addSplatScene(splatURL, {
+            showLoadingUI: true,
+        })
+        .then(() => {
+            viewer.start();
+        })
+        .catch((error) => {
+            console.error("Error loading the splat scene:", error);
+        });
+    </script>
+
+</body>
+</html>
