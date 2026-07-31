@@ -213,19 +213,24 @@
 <img src="./pipeline.png" alt="TokenGS Architecture" class="placeholder-image">    </div>
 
     <!-- Interactive 3D Demo Section -->
+<!-- Interactive 3D Demo Section -->
     <div id="demo" class="section">
         <h2>Interactive Viewer</h2>
         <p style="text-align: center; color: #aaa;">Explore the reconstructed 3D Gaussians in real-time.</p>
         
-        <div id="viewer-container">
-            <div id="controls-info">
-                <h3>🎥 Camera Controls</h3>
-                • Left Click + Drag: Orbit / Rotate<br>
-                • Right Click + Drag: Pan<br>
-                • Scroll: Zoom In/Out<br>
-            </div>
+        <!-- The Luma Viewer Container -->
+        <div id="viewer-container" style="border-radius: 12px; overflow: hidden; margin-top: 20px;">
+            <!-- This one line of HTML creates the entire 3D viewer with the buttons! -->
+            <luma-viewer 
+                source="https://lumalabs.ai/capture/d80d4876-07ce-4c17-8178-9e19d1e374ff" 
+                background="transparent"
+                style="width: 100%; height: 60vh;">
+            </luma-viewer>
         </div>
     </div>
+
+    <!-- Import the Luma Web Library -->
+    <script type="module" src="https://unpkg.com/@lumaai/luma-web"></script>
 <!-- 3D Viewer Script -->
     <script type="module">
         import * as THREE from 'three';
