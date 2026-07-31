@@ -32,7 +32,6 @@
             align-items: center;
             gap: 10px;
         }
-        .navbar .brand img { width: 40px; } /* Placeholder for NVIDIA logo */
         .navbar .links a {
             color: #ccc;
             text-decoration: none;
@@ -54,7 +53,7 @@
             margin-right: auto;
             line-height: 1.2;
         }
-        .text-green { color: #76b900; } /* NVIDIA Green */
+        .text-green { color: #76b900; } 
         
         .authors {
             font-size: 1.2rem;
@@ -125,26 +124,13 @@
         #viewer-container {
             width: 100%;
             height: 60vh;
-            background: #000;
+            background: #111;
             border: 1px solid #333;
             border-radius: 12px;
             position: relative;
             overflow: hidden;
             margin-top: 20px;
         }
-        #controls-info {
-            position: absolute;
-            bottom: 15px;
-            left: 15px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            pointer-events: none;
-            border: 1px solid #444;
-        }
-        #controls-info h3 { margin: 0 0 10px 0; font-size: 1rem; color: #76b900; }
         
         .placeholder-image {
             width: 100%;
@@ -152,23 +138,14 @@
             margin-top: 20px;
         }
     </style>
-
-    <!-- Import Maps to load Three.js and the Splat library via CDN -->
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://unpkg.com/three@0.157.0/build/three.module.js",
-            "@mkkellogg/gaussian-splats-3d": "https://unpkg.com/@mkkellogg/gaussian-splats-3d/build/gaussian-splats-3d.module.js"
-        }
-    }
-    </script>
 </head>
 <body>
 
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="brand">
-            Spatial Intelligence Lab
+            <!-- Updated Lab Name -->
+            Intelligence Machines Lab
         </div>
         <div class="links">
             <a href="#gallery">Gallery</a>
@@ -209,55 +186,26 @@
         <p class="abstract-text">
             In this work, we revisit several key design choices of modern Transformer-based approaches for feed-forward 3D Gaussian Splatting (3DGS) prediction. We argue that the common practice of regressing Gaussian means as depths along camera rays is suboptimal, and instead propose to directly regress 3D mean coordinates using only a self-supervised rendering loss. This formulation allows us to move from the standard encoder-only design to an encoder-decoder architecture with learnable Gaussian tokens.
         </p>
-        <!-- Placeholder Image -->
-<img src="./pipeline.png" alt="TokenGS Architecture" class="placeholder-image">    </div>
+        <img src="./pipeline.png" alt="TokenGS Architecture" class="placeholder-image">
+    </div>
 
     <!-- Interactive 3D Demo Section -->
-<!-- Interactive 3D Demo Section -->
     <div id="demo" class="section">
         <h2>Interactive Viewer</h2>
         <p style="text-align: center; color: #aaa;">Explore the reconstructed 3D Gaussians in real-time.</p>
         
-        <!-- The Luma Viewer Container -->
-        <div id="viewer-container" style="border-radius: 12px; overflow: hidden; margin-top: 20px;">
-            <!-- This one line of HTML creates the entire 3D viewer with the buttons! -->
+        <div id="viewer-container">
+            <!-- The Luma Viewer -->
             <luma-viewer 
                 source="https://lumalabs.ai/capture/d80d4876-07ce-4c17-8178-9e19d1e374ff" 
                 background="transparent"
-                style="width: 100%; height: 60vh;">
+                style="width: 100%; height: 100%;">
             </luma-viewer>
         </div>
     </div>
 
-    <!-- Import the Luma Web Library -->
+    <!-- Import the Luma Web Library ONCE at the bottom -->
     <script type="module" src="https://unpkg.com/@lumaai/luma-web"></script>
-<!-- 3D Viewer Script -->
-    <script type="module">
-        import * as THREE from 'three';
-        import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 
-        // Initialize the Viewer
-        const viewer = new GaussianSplats3D.Viewer({
-            cameraUp: [0, -1, -0.6], // Set for the bonsai scene
-            initialCameraPosition: [-1, -4, 6],
-            initialCameraLookAt: [0, 4, 0],
-            rootElement: document.getElementById('viewer-container'),
-            useBuiltInControls: true, 
-        });
-
-        // Use the file from YOUR OWN REPOSITORY
-        const splatURL = './bonsai.ksplat'; 
-
-        viewer.addSplatScene(splatURL, {
-            showLoadingUI: true,
-        })
-        .then(() => {
-            viewer.start();
-        })
-        .catch((error) => {
-            console.error("Error loading the splat scene:", error);
-            // Hint: Open your browser's Developer Console (F12) to see errors.
-        });
-    </script>
 </body>
 </html>
