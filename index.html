@@ -226,23 +226,22 @@
             </div>
         </div>
     </div>
-
-    <!-- 3D Viewer Script -->
+<!-- 3D Viewer Script -->
     <script type="module">
         import * as THREE from 'three';
         import * as GaussianSplats3D from '@mkkellogg/gaussian-splats-3d';
 
         // Initialize the Viewer
         const viewer = new GaussianSplats3D.Viewer({
-            cameraUp: [0, -1, -0.6], 
+            cameraUp: [0, -1, -0.6], // Set for the bonsai scene
             initialCameraPosition: [-1, -4, 6],
             initialCameraLookAt: [0, 4, 0],
             rootElement: document.getElementById('viewer-container'),
             useBuiltInControls: true, 
         });
 
-        // Load a publicly available demo splat (Bonsai tree)
-        const splatURL = 'https://huggingface.co/datasets/mkkellogg/gaussian-splats-3d/resolve/main/bonsai.ksplat';
+        // Use the file from YOUR OWN REPOSITORY
+        const splatURL = './bonsai.ksplat'; 
 
         viewer.addSplatScene(splatURL, {
             showLoadingUI: true,
@@ -252,8 +251,8 @@
         })
         .catch((error) => {
             console.error("Error loading the splat scene:", error);
+            // Hint: Open your browser's Developer Console (F12) to see errors.
         });
     </script>
-
 </body>
 </html>
