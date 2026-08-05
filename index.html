@@ -286,6 +286,229 @@
             50% { transform: rotateX(45deg) rotateY(0) rotateZ(225deg); }
             100% { transform: rotateX(45deg) rotateY(0) rotateZ(405deg); }
         }
+        /* --- Light/Dark Theme Variables --- */
+:root {
+  --bg-color: #0f0f0f;
+  --panel-bg: rgba(255, 255, 255, 0.05);
+  --text-color: #f0f0f0;
+  --text-muted: #aaaaaa;
+  --accent-color: #76b900;
+  --border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] {
+  --bg-color: #f8f9fa;
+  --panel-bg: #ffffff;
+  --text-color: #1a1a1a;
+  --text-muted: #555555;
+  --accent-color: #007bff;
+  --border-color: #e0e0e0;
+}
+
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* --- Theme Switcher Button --- */
+.theme-toggle-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--panel-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  z-index: 1000;
+}
+.theme-toggle-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* --- Image Carousel Styles --- */
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  margin: 25px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+}
+
+.carousel-slide {
+  display: none;
+  text-align: center;
+  padding: 15px;
+}
+
+.carousel-slide.active {
+  display: block;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.carousel-caption {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: var(--text-muted);
+  line-height: 1.4;
+  padding: 0 10px;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 45%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: none;
+  font-size: 22px;
+  padding: 10px 16px;
+  cursor: pointer;
+  border-radius: 50%;
+  user-select: none;
+  transition: background 0.2s;
+}
+
+.carousel-btn:hover {
+  background: var(--accent-color);
+}
+
+.carousel-btn.prev { left: 15px; }
+.carousel-btn.next { right: 15px; }
+
+.carousel-dots {
+  text-align: center;
+  padding-bottom: 12px;
+}
+
+.dot {
+  cursor: pointer;
+  height: 10px;
+  width: 10px;
+  margin: 0 4px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.5;
+  transition: opacity 0.2s, background-color 0.2s;
+}
+
+.dot.active, .dot:hover {
+  opacity: 1;
+  background-color: var(--accent-color);
+}
+/* --- Theme Variables --- */
+:root {
+  --bg-color: #0f0f0f;
+  --panel-bg: rgba(255, 255, 255, 0.05);
+  --text-color: #f0f0f0;
+  --text-muted: #aaaaaa;
+  --accent-color: #76b900;
+  --border-color: rgba(255, 255, 255, 0.15);
+  --nav-bg: rgba(15, 15, 15, 0.85);
+}
+
+[data-theme="light"] {
+  --bg-color: #f8f9fa;
+  --panel-bg: #ffffff;
+  --text-color: #1a1a1a;
+  --text-muted: #555555;
+  --accent-color: #007bff; /* Switches to crisp blue in light mode */
+  --border-color: #e0e0e0;
+  --nav-bg: rgba(248, 249, 250, 0.85);
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
+}
+
+.text-green {
+  color: var(--accent-color);
+}
+
+/* --- Theme Toggle Button (Fixed on the Top Right) --- */
+.theme-toggle-btn {
+  position: fixed;
+  top: 12px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: var(--panel-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  backdrop-filter: blur(8px);
+  z-index: 2000; /* Stays above everything */
+  transition: all 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+/* --- Sticky Floating Navigation Bar --- */
+.navbar {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px 0;
+  z-index: 1000;
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 6px 14px;
+  border-radius: 15px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--accent-color);
+  background: var(--panel-bg);
+}
+
+/* --- Fixed Author Superscripts Gap --- */
+.authors span {
+  display: inline-block;
+  margin: 0 6px;
+}
+
+.authors sup, .affiliations sup {
+  margin-left: 1px; /* Removes awkward gaps before numbers */
+  font-size: 0.75em;
+  color: var(--accent-color);
+}
+        
     </style>
 </head>
 <body>
@@ -303,40 +526,96 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero">
-        <h1><span class="text-green">TokenGS:</span><br>Decoupling 3D Gaussian Prediction from Pixels with Learnable Tokens</h1>
+<!-- Fixed Theme Switcher on Top Right -->
+<button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Theme</button>
 
-        <div class="authors">
-            <span>Jiawei Ren*</span>
-            <span>Michal Tyszkiewicz*</span>
-            <span>Jiahui Huang†</span>
-            <span>Zan Gojcic†</span>
-        </div>
+<!-- Static / Sticky Navbar at the Top -->
+<nav class="navbar">
+  <a href="#demo" class="nav-link active">🎮 Demo Viewer</a>
+  <a href="#abstract" class="nav-link">📝 Abstract</a>
+  <a href="#architecture" class="nav-link">🖼️ Architecture</a>
+  <a href="#citation" class="nav-link">📌 Citation</a>
+</nav>
 
-        <div class="affiliations">NVIDIA</div>
-        <div class="notes">* Equal Contribution &nbsp;&nbsp; † Equal Advising</div>
+<!-- Hero Section -->
+<div class="hero">
+  <h1>
+    <span class="text-green">PGGS:</span><br>
+    Perceptually Guided Gaussian Splatting
+  </h1>
 
-        <div class="venue">CVPR 2026 (Highlight)</div>
+  <div class="authors">
+    <span>Ahmed Haroon<sup>1</sup></span>
+    <span>Aneesa Razzaq<sup>1</sup></span>
+    <span>Musab Bin Abaid<sup>1</sup></span>
+    <span>Hyon-Gon Choo<sup>2</sup></span>
+    <span>Mohsen Ali<sup>1</sup></span>
+    <span>Rehan Hafiz<sup>1</sup></span>
+    <span>Yongju Cho<sup>2*</sup></span>
+  </div>
 
-        <div class="button-group">
-            <a href="#">📄 Paper</a>
-            <a href="https://github.com/HaseebUlHassan437/tokengs-demo" target="_blank">💻 Code</a>
-            <a href="#demo">🎮 Demo</a>
-            <a href="#">🤗 HuggingFace</a>
-            <a href="#citation">📌 Citation</a>
-        </div>
-    </div>
+  <div class="affiliations">
+    <sup>1</sup>Information Technology University, Lahore, Pakistan &nbsp;&nbsp;|&nbsp;&nbsp;
+    <sup>2</sup>Electronics and Telecommunications Research Institute, Daejeon, Korea
+  </div>
 
-    <!-- Abstract Section -->
-    <div id="abstract" class="section">
-        <h2>Abstract</h2>
-        <p class="abstract-text">
-            In this work, we revisit several key design choices of modern Transformer-based approaches for feed-forward 3D Gaussian Splatting (3DGS) prediction. We argue that the common practice of regressing Gaussian means as depths along camera rays is suboptimal, and instead propose to directly regress 3D mean coordinates using only a self-supervised rendering loss. This formulation allows us to move from the standard encoder-only design to an encoder-decoder architecture with learnable Gaussian tokens.
-        </p>
-        <img src="./pipeline.png" alt="TokenGS Architecture" class="placeholder-image" onerror="this.style.display='none'">
-    </div>
+  <div class="notes">* Corresponding Author</div>
 
+  <div class="button-group">
+    <a href="#">📄 Paper</a>
+    <a href="https://github.com/HaseebUlHassan437/tokengs-demo" target="_blank">💻 Code</a>
+    <a href="#demo">🎮 Demo</a>
+    <a href="#abstract">📝 Abstract</a>
+    <a href="#citation">📌 Citation</a>
+  </div>
+</div>
+
+<!-- 1. Interactive 3D Viewer Section -->
+<div id="demo" style="position: relative; width: 100%; height: 80vh; margin: 20px 0;">
+  <canvas id="canvas" style="width: 100%; height: 100%; display: block;"></canvas>
+  <div id="spinner" class="spinner" style="display: none;"></div>
+  <div id="message" style="display: none;"></div>
+</div>
+
+<!-- 2. Abstract Section -->
+<div id="abstract" class="abstract-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Abstract</h3>
+  <p class="abstract-text" style="text-align: justify; line-height: 1.6; color: var(--text-color); margin-top: 15px;">
+    Recent advances in 3D Gaussian Splatting (3DGS) have enabled efficient photorealistic novel-view synthesis. However, its optimization remains highly sensitive to hand-tuned hyperparameters, such as the learning rates for different Gaussian parameters. Fixed learning rates or manually designed learning-rate schedules may not adapt to variations across scenes or handle the evolving nature of Gaussians during optimization. We present <strong>Perceptually Guided Gaussian Splatting (PGGS)</strong>, a reinforcement learning based framework that continuously adjusts these learning rates throughout the Gaussian optimization process. Specifically, we propose a policy network that observes recent training statistics and outputs learning-rate scaling factors. The output of the proposed policy network is guided by a perceptual reward computed using a no-reference image quality assessment (NR-IQA) model, encouraging the policy to favor behaviors that enhance human-perceived visual fidelity. The use of NR-IQA allows us to compute perceptual rewards on generated augmented novel views. By leveraging NR-IQA on augmented novel views, PGGS obtains a pseudo-validation signal of visual quality without holding out training images, which is especially helpful in sparse-view settings where data is limited. As a plug-and-play module, PGGS fits into existing 3DGS pipelines and improves visual quality across diverse scenes and datasets. Across multiple datasets (Tanks & Temples, Mip-NeRF360, MVImgNet, LLFF) and 3DGS backbones (InstantSplat, FSGS), PGGS consistently improves across multiple standard metrics. For example, on MVImgNet, PGGS improves InstantSplat by 0.0378 in SSIM and 0.47 in PSNR; similarly, on Mip-NeRF360, PGGS improves FSGS by 0.0077 in SSIM and 0.24 in PSNR.
+  </p>
+</div>
+
+<!-- 3. Image Carousel Architecture Section -->
+<div id="architecture" class="carousel-container" style="max-width: 850px; margin: 40px auto;">
+  <div class="carousel-slide active">
+    <img src="./fig2_architecture.png" alt="PGGS Block-level Architecture">
+    <p class="carousel-caption"><strong>Fig 2: PGGS Block-level Architecture.</strong> The three modules (State Encoder, Policy Network, and Perceptual Reward Model) interface with a generic 3DGS backend through a single integration point, i.e., the learning-rate scaling factors.</p>
+  </div>
+
+  <div class="carousel-slide">
+    <img src="./fig3_overview.png" alt="Overview of the PGGS Framework">
+    <p class="carousel-caption"><strong>Fig 3: Overview of the PGGS Framework.</strong> At each phase, the policy network samples learning-rate scaling factors. The current Gaussian set is cloned into multiple copies, optimized independently, and evaluated using an NR-IQA model to update the policy network.</p>
+  </div>
+
+  <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+  <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+
+  <div class="carousel-dots">
+    <span class="dot active" onclick="setSlide(0)"></span>
+    <span class="dot" onclick="setSlide(1)"></span>
+  </div>
+</div>
+
+<!-- 4. Citation Section -->
+<div id="citation" class="citation-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Citation</h3>
+  <pre style="background: var(--panel-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; overflow-x: auto; color: var(--text-color); margin-top: 15px;"><code>@article{haroon2026pggs,
+  title={Perceptually Guided Gaussian Splatting (PGGS): Hyperparameter Control with Perceptual Rewards and View Augmentation},
+  author={Haroon, Ahmed and Razzaq, Aneesa and Abaid, Musab Bin and Choo, Hyon-Gon and Ali, Mohsen and Hafiz, Rehan and Cho, Yongju},
+  year={2026}
+}</code></pre>
+</div>
+    
     <!-- Interactive 3D Demo Section -->
     <div id="demo" class="section">
         <h2>Interactive Viewer</h2>
@@ -1893,6 +2172,70 @@ main().catch((err) => {
     document.getElementById("gs-message").innerText = err.toString();
 });
     </script>
+<script>
+  // --- Theme Toggle Logic ---
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', newTheme);
+  }
 
+  // --- Image Carousel Logic ---
+  let currentSlideIdx = 0;
+
+  function showSlide(index) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (index >= slides.length) currentSlideIdx = 0;
+    else if (index < 0) currentSlideIdx = slides.length - 1;
+    else currentSlideIdx = index;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === currentSlideIdx);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('active', i === currentSlideIdx);
+    });
+  }
+
+  function moveSlide(step) {
+    showSlide(currentSlideIdx + step);
+  }
+
+  function setSlide(index) {
+    showSlide(index);
+  }
+</script>
+    <script>
+  // --- Theme Switcher ---
+  function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const targetTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', targetTheme);
+  }
+
+  // --- ScrollSpy logic: Highlights active header option as you scroll ---
+  window.addEventListener('scroll', () => {
+    let currentSection = '';
+    const sections = document.querySelectorAll('#demo, #abstract, #architecture, #citation');
+
+    sections.forEach(section => {
+      const sectionTop = section.offsetTop - 120; // Offset for sticky navbar height
+      if (window.scrollY >= sectionTop) {
+        currentSection = section.getAttribute('id');
+      }
+    });
+
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === `#${currentSection}`) {
+        link.classList.add('active');
+      }
+    });
+  });
+</script>
 </body>
 </html>
+ 		
