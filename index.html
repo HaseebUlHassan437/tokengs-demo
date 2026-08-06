@@ -570,52 +570,6 @@ body {
   </div>
 </div>
 
-<!-- 1. Interactive 3D Viewer Section -->
-<div id="demo" style="position: relative; width: 100%; height: 80vh; margin: 20px 0;">
-  <canvas id="canvas" style="width: 100%; height: 100%; display: block;"></canvas>
-  <div id="spinner" class="spinner" style="display: none;"></div>
-  <div id="message" style="display: none;"></div>
-</div>
-
-<!-- 2. Abstract Section -->
-<div id="abstract" class="abstract-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
-  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Abstract</h3>
-  <p class="abstract-text" style="text-align: justify; line-height: 1.6; color: var(--text-color); margin-top: 15px;">
-    Recent advances in 3D Gaussian Splatting (3DGS) have enabled efficient photorealistic novel-view synthesis. However, its optimization remains highly sensitive to hand-tuned hyperparameters, such as the learning rates for different Gaussian parameters. Fixed learning rates or manually designed learning-rate schedules may not adapt to variations across scenes or handle the evolving nature of Gaussians during optimization. We present <strong>Perceptually Guided Gaussian Splatting (PGGS)</strong>, a reinforcement learning based framework that continuously adjusts these learning rates throughout the Gaussian optimization process. Specifically, we propose a policy network that observes recent training statistics and outputs learning-rate scaling factors. The output of the proposed policy network is guided by a perceptual reward computed using a no-reference image quality assessment (NR-IQA) model, encouraging the policy to favor behaviors that enhance human-perceived visual fidelity. The use of NR-IQA allows us to compute perceptual rewards on generated augmented novel views. By leveraging NR-IQA on augmented novel views, PGGS obtains a pseudo-validation signal of visual quality without holding out training images, which is especially helpful in sparse-view settings where data is limited. As a plug-and-play module, PGGS fits into existing 3DGS pipelines and improves visual quality across diverse scenes and datasets. Across multiple datasets (Tanks & Temples, Mip-NeRF360, MVImgNet, LLFF) and 3DGS backbones (InstantSplat, FSGS), PGGS consistently improves across multiple standard metrics. For example, on MVImgNet, PGGS improves InstantSplat by 0.0378 in SSIM and 0.47 in PSNR; similarly, on Mip-NeRF360, PGGS improves FSGS by 0.0077 in SSIM and 0.24 in PSNR.
-  </p>
-</div>
-
-<!-- 3. Image Carousel Architecture Section -->
-<div id="architecture" class="carousel-container" style="max-width: 850px; margin: 40px auto;">
-  <div class="carousel-slide active">
-    <img src="./fig2_architecture.png" alt="PGGS Block-level Architecture">
-    <p class="carousel-caption"><strong>Fig 2: PGGS Block-level Architecture.</strong> The three modules (State Encoder, Policy Network, and Perceptual Reward Model) interface with a generic 3DGS backend through a single integration point, i.e., the learning-rate scaling factors.</p>
-  </div>
-
-  <div class="carousel-slide">
-    <img src="./fig3_overview.png" alt="Overview of the PGGS Framework">
-    <p class="carousel-caption"><strong>Fig 3: Overview of the PGGS Framework.</strong> At each phase, the policy network samples learning-rate scaling factors. The current Gaussian set is cloned into multiple copies, optimized independently, and evaluated using an NR-IQA model to update the policy network.</p>
-  </div>
-
-  <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-  <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
-
-  <div class="carousel-dots">
-    <span class="dot active" onclick="setSlide(0)"></span>
-    <span class="dot" onclick="setSlide(1)"></span>
-  </div>
-</div>
-
-<!-- 4. Citation Section -->
-<div id="citation" class="citation-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
-  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Citation</h3>
-  <pre style="background: var(--panel-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; overflow-x: auto; color: var(--text-color); margin-top: 15px;"><code>@article{haroon2026pggs,
-  title={Perceptually Guided Gaussian Splatting (PGGS): Hyperparameter Control with Perceptual Rewards and View Augmentation},
-  author={Haroon, Ahmed and Razzaq, Aneesa and Abaid, Musab Bin and Choo, Hyon-Gon and Ali, Mohsen and Hafiz, Rehan and Cho, Yongju},
-  year={2026}
-}</code></pre>
-</div>
-    
     <!-- Interactive 3D Demo Section -->
     <div id="demo" class="section">
         <h2>Interactive Viewer</h2>
@@ -678,6 +632,45 @@ other
         </p>
     </div>
 
+<!-- 2. Abstract Section -->
+<div id="abstract" class="abstract-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Abstract</h3>
+  <p class="abstract-text" style="text-align: justify; line-height: 1.6; color: var(--text-color); margin-top: 15px;">
+    Recent advances in 3D Gaussian Splatting (3DGS) have enabled efficient photorealistic novel-view synthesis. However, its optimization remains highly sensitive to hand-tuned hyperparameters, such as the learning rates for different Gaussian parameters. Fixed learning rates or manually designed learning-rate schedules may not adapt to variations across scenes or handle the evolving nature of Gaussians during optimization. We present <strong>Perceptually Guided Gaussian Splatting (PGGS)</strong>, a reinforcement learning based framework that continuously adjusts these learning rates throughout the Gaussian optimization process. Specifically, we propose a policy network that observes recent training statistics and outputs learning-rate scaling factors. The output of the proposed policy network is guided by a perceptual reward computed using a no-reference image quality assessment (NR-IQA) model, encouraging the policy to favor behaviors that enhance human-perceived visual fidelity. The use of NR-IQA allows us to compute perceptual rewards on generated augmented novel views. By leveraging NR-IQA on augmented novel views, PGGS obtains a pseudo-validation signal of visual quality without holding out training images, which is especially helpful in sparse-view settings where data is limited. As a plug-and-play module, PGGS fits into existing 3DGS pipelines and improves visual quality across diverse scenes and datasets. Across multiple datasets (Tanks & Temples, Mip-NeRF360, MVImgNet, LLFF) and 3DGS backbones (InstantSplat, FSGS), PGGS consistently improves across multiple standard metrics. For example, on MVImgNet, PGGS improves InstantSplat by 0.0378 in SSIM and 0.47 in PSNR; similarly, on Mip-NeRF360, PGGS improves FSGS by 0.0077 in SSIM and 0.24 in PSNR.
+  </p>
+</div>
+
+<!-- 3. Image Carousel Architecture Section -->
+<div id="architecture" class="carousel-container" style="max-width: 850px; margin: 40px auto;">
+  <div class="carousel-slide active">
+    <img src="./fig2_architecture.png" alt="PGGS Block-level Architecture">
+    <p class="carousel-caption"><strong>Fig 2: PGGS Block-level Architecture.</strong> The three modules (State Encoder, Policy Network, and Perceptual Reward Model) interface with a generic 3DGS backend through a single integration point, i.e., the learning-rate scaling factors.</p>
+  </div>
+
+  <div class="carousel-slide">
+    <img src="./fig3_overview.png" alt="Overview of the PGGS Framework">
+    <p class="carousel-caption"><strong>Fig 3: Overview of the PGGS Framework.</strong> At each phase, the policy network samples learning-rate scaling factors. The current Gaussian set is cloned into multiple copies, optimized independently, and evaluated using an NR-IQA model to update the policy network.</p>
+  </div>
+
+  <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
+  <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
+
+  <div class="carousel-dots">
+    <span class="dot active" onclick="setSlide(0)"></span>
+    <span class="dot" onclick="setSlide(1)"></span>
+  </div>
+</div>
+
+<!-- 4. Citation Section -->
+<div id="citation" class="citation-container" style="max-width: 850px; margin: 40px auto; padding: 0 20px;">
+  <h3 style="border-bottom: 2px solid var(--accent-color); display: inline-block; padding-bottom: 4px;">Citation</h3>
+  <pre style="background: var(--panel-bg); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; overflow-x: auto; color: var(--text-color); margin-top: 15px;"><code>@article{haroon2026pggs,
+  title={Perceptually Guided Gaussian Splatting (PGGS): Hyperparameter Control with Perceptual Rewards and View Augmentation},
+  author={Haroon, Ahmed and Razzaq, Aneesa and Abaid, Musab Bin and Choo, Hyon-Gon and Ali, Mohsen and Hafiz, Rehan and Cho, Yongju},
+  year={2026}
+}</code></pre>
+</div>
+    
     <script>
 let cameras = [
     {
@@ -2238,4 +2231,3 @@ main().catch((err) => {
 </script>
 </body>
 </html>
- 		
