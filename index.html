@@ -232,6 +232,60 @@
         #gs-quality { right: 10px; }
         #gs-caminfo { right: 10px; top: 12px; bottom: auto; }
 
+        /* Camera-mode toolbar (theme-aware: reacts to the page's light/dark toggle) */
+        #gs-toolbar {
+            position: absolute;
+            left: 50%;
+            bottom: 12px;
+            transform: translateX(-50%);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(6px);
+            padding: 6px;
+            border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 92%;
+        }
+        .gs-tbtn {
+            background: transparent;
+            color: #ddd;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+        }
+        .gs-tbtn:hover {
+            border-color: var(--accent-color, #76b900);
+            color: var(--accent-color, #76b900);
+        }
+        .gs-tbtn-active {
+            background: var(--accent-color, #76b900);
+            color: #000;
+            border-color: var(--accent-color, #76b900);
+        }
+        .gs-tbtn-active:hover {
+            color: #000;
+        }
+        .gs-tbtn-sep {
+            width: 1px;
+            height: 18px;
+            background: rgba(255,255,255,0.15);
+            margin: 0 2px;
+        }
+        @media (max-width: 640px) {
+            #gs-toolbar { bottom: 8px; padding: 5px; gap: 4px; }
+            .gs-tbtn { padding: 5px 10px; font-size: 0.7rem; }
+        }
+
         #gs-message {
             position: absolute;
             inset: 0;
@@ -624,7 +678,18 @@ other
 
             <div id="gs-quality"><span id="fps"></span></div>
             <div id="gs-caminfo"><span id="camid"></span></div>
+
+            <div id="gs-toolbar">
+                <button id="gs-btn-orbit" class="gs-tbtn gs-tbtn-active" title="Orbit camera: drag to rotate around the scene">🧭 Orbit</button>
+                <button id="gs-btn-fly" class="gs-tbtn" title="Fly camera: WASD + arrow keys to move freely, drag to look">🕹️ Fly</button>
+                <span class="gs-tbtn-sep"></span>
+                <button id="gs-btn-autorotate" class="gs-tbtn" title="Toggle automatic slow rotation">🔄 Auto-Rotate</button>
+                <button id="gs-btn-reset" class="gs-tbtn" title="Reset to default view">⟲ Reset View</button>
+                <button id="gs-btn-fullscreen" class="gs-tbtn" title="Toggle fullscreen">⛶ Fullscreen</button>
+            </div>
         </div>
+
+        <p class="demo-caption" id="gs-mode-caption" style="margin-top:10px;">Mode: <strong>Orbit</strong> &mdash; drag to rotate around the scene, scroll to zoom</p>
 
         <p class="demo-note">
             Renders a public sample Gaussian splat (<code>train.splat</code>) with a real-time WebGL splat rasterizer, since no project-specific reconstruction file was provided.
@@ -1460,6 +1525,17 @@ async function main() {
         antialias: false,
     });
 
+    if (!gl) {
+        document.getElementById("gs-spinner").style.display = "none";
+        const msgEl = document.getElementById("gs-message");
+        msgEl.style.display = "flex";
+        msgEl.innerText =
+            "WebGL2 is not available in this browser/device, so the 3D viewer can't run here. " +
+            "Try enabling hardware acceleration in your browser settings, updating your GPU drivers, " +
+            "or opening this page in a different browser.";
+        throw new Error("WebGL2 context could not be created");
+    }
+
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vertexShader, vertexShaderSource);
     gl.compileShader(vertexShader);
@@ -1600,6 +1676,7 @@ async function main() {
     };
 
     let activeKeys = [];
+    let camMode = "orbit"; // "orbit" | "fly"
     let currentCameraIndex = 0;
 
     window.addEventListener("keydown", (e) => {
@@ -1842,6 +1919,63 @@ async function main() {
         { passive: false },
     );
 
+    // ===== Camera-mode toolbar (Orbit / Fly / Auto-Rotate / Reset / Fullscreen) =====
+    const btnOrbit = document.getElementById("gs-btn-orbit");
+    const btnFly = document.getElementById("gs-btn-fly");
+    const btnAutoRotate = document.getElementById("gs-btn-autorotate");
+    const btnReset = document.getElementById("gs-btn-reset");
+    const btnFullscreen = document.getElementById("gs-btn-fullscreen");
+    const modeCaption = document.getElementById("gs-mode-caption");
+
+    const setCamMode = (mode) => {
+        camMode = mode;
+        activeKeys = [];
+        btnOrbit.classList.toggle("gs-tbtn-active", mode === "orbit");
+        btnFly.classList.toggle("gs-tbtn-active", mode === "fly");
+        if (modeCaption) {
+            modeCaption.innerHTML =
+                mode === "orbit"
+                    ? "Mode: <strong>Orbit</strong> &mdash; drag to rotate around the scene, scroll to zoom"
+                    : "Mode: <strong>Fly</strong> &mdash; arrow keys / WASD to fly through the scene, drag to look around";
+        }
+    };
+    if (btnOrbit) btnOrbit.addEventListener("click", () => setCamMode("orbit"));
+    if (btnFly) btnFly.addEventListener("click", () => setCamMode("fly"));
+
+    if (btnAutoRotate) {
+        btnAutoRotate.addEventListener("click", () => {
+            carousel = !carousel;
+            start = Date.now();
+            btnAutoRotate.classList.toggle("gs-tbtn-active", carousel);
+        });
+    }
+
+    if (btnReset) {
+        btnReset.addEventListener("click", () => {
+            carousel = false;
+            if (btnAutoRotate) btnAutoRotate.classList.remove("gs-tbtn-active");
+            currentCameraIndex = 0;
+            camera = cameras[0];
+            viewMatrix = defaultViewMatrix;
+            jumpDelta = 0;
+        });
+    }
+
+    if (btnFullscreen) {
+        btnFullscreen.addEventListener("click", () => {
+            const container = canvas.parentElement;
+            if (!document.fullscreenElement) {
+                (container.requestFullscreen || container.webkitRequestFullscreen)?.call(
+                    container,
+                );
+            } else {
+                (document.exitFullscreen || document.webkitExitFullscreen)?.call(
+                    document,
+                );
+            }
+        });
+    }
+
     let jumpDelta = 0;
     let vertexCount = 0;
 
@@ -1868,32 +2002,34 @@ async function main() {
             activeKeys.includes("ShiftLeft") ||
             activeKeys.includes("ShiftRight");
 
-        if (activeKeys.includes("ArrowUp")) {
-            if (shiftKey) {
-                inv = translate4(inv, 0, -0.03, 0);
-            } else {
-                inv = translate4(inv, 0, 0, 0.1);
+        if (camMode === "fly") {
+            if (activeKeys.includes("ArrowUp")) {
+                if (shiftKey) {
+                    inv = translate4(inv, 0, -0.03, 0);
+                } else {
+                    inv = translate4(inv, 0, 0, 0.1);
+                }
             }
-        }
-        if (activeKeys.includes("ArrowDown")) {
-            if (shiftKey) {
-                inv = translate4(inv, 0, 0.03, 0);
-            } else {
-                inv = translate4(inv, 0, 0, -0.1);
+            if (activeKeys.includes("ArrowDown")) {
+                if (shiftKey) {
+                    inv = translate4(inv, 0, 0.03, 0);
+                } else {
+                    inv = translate4(inv, 0, 0, -0.1);
+                }
             }
+            if (activeKeys.includes("ArrowLeft"))
+                inv = translate4(inv, -0.03, 0, 0);
+            //
+            if (activeKeys.includes("ArrowRight"))
+                inv = translate4(inv, 0.03, 0, 0);
+            // inv = rotate4(inv, 0.01, 0, 1, 0);
+            if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
+            if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
+            if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
+            if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
+            if (activeKeys.includes("KeyW")) inv = rotate4(inv, 0.005, 1, 0, 0);
+            if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
         }
-        if (activeKeys.includes("ArrowLeft"))
-            inv = translate4(inv, -0.03, 0, 0);
-        //
-        if (activeKeys.includes("ArrowRight"))
-            inv = translate4(inv, 0.03, 0, 0);
-        // inv = rotate4(inv, 0.01, 0, 1, 0);
-        if (activeKeys.includes("KeyA")) inv = rotate4(inv, -0.01, 0, 1, 0);
-        if (activeKeys.includes("KeyD")) inv = rotate4(inv, 0.01, 0, 1, 0);
-        if (activeKeys.includes("KeyQ")) inv = rotate4(inv, 0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyE")) inv = rotate4(inv, -0.01, 0, 0, 1);
-        if (activeKeys.includes("KeyW")) inv = rotate4(inv, 0.005, 1, 0, 0);
-        if (activeKeys.includes("KeyS")) inv = rotate4(inv, -0.005, 1, 0, 0);
 
         const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
         let isJumping = activeKeys.includes("Space");
